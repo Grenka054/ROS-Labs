@@ -1,0 +1,5 @@
+Starting >>> grenka054
+Finished <<< grenka054 [0.72s]
+
+Summary: 1 package finished [0.90s]
+  1 package had stderr output: grenka054
