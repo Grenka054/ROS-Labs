@@ -73,4 +73,26 @@ ros2 launch three_turtles.launch
 Управлять первой черепахой в 2.8:
 ros2 run turtlesim turtle_teleop_key --ros-args --remap turtle1/cmd_vel:=/turtlesim1/turtle1/cmd_vel
 
+Создание ROS msg и srv:
+https://github.com/colcon/colcon-ed
+https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html
+
+Установка colcon edit:
+sudo apt install python3-pip
+pip install colcon-ed
+
+sudo apt-get install vim
+
+colcon edit <package_name> <file_name>
+
+Написание Издателя и Подписчика:
+https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html
+
+Сборка:
+cd ~/ros2_ws
+colcon build --packages-select text_to_cmd_vel
+ros2 run turtlesim turtlesim_node
+ros2 run text_to_cmd_vel text_to_cmd_vel
+ros2 topic pub --once cmd_text std_msgs/msg/String "{data: "move_forward"}"
+ros2 topic pub --once cmd_text std_msgs/msg/String "{data: "turn_right"}"
 

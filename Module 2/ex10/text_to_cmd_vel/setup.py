@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'grenka054'
+package_name = 'text_to_cmd_vel'
 
 setup(
     name=package_name,
@@ -15,11 +15,12 @@ setup(
     zip_safe=True,
     maintainer='grenka',
     maintainer_email='alexgrihalex@gmail.com',
-    description='TODO: Package description',
+    description='Command translator',
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'text_to_cmd_vel = text_to_cmd_vel.text_to_cmd_vel:main'
         ],
     },
 )
