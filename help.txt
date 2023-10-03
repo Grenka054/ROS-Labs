@@ -57,5 +57,20 @@ ros2 param load <node_name> <parameter_file>
 Запустить узел с параметрами из файла:
 ros2 run <package_name> <executable_name> --ros-args --params-file <file_name>
 
+Использование rqt_console и roslaunch:
+https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Using-Rqt-Console/Using-Rqt-Console.html
+
+https://docs.ros.org/en/humble/Tutorials/Intermediate/Launch/Creating-Launch-Files.html
+
+Запустить журнал сообщений:
+ros2 run rqt_console rqt_console
+ros2 run turtlesim turtlesim_node --ros-args --log-level WARN
+
+Запустить лонч:
+ros2 launch <package_name> <launch_file_name>
+ros2 launch three_turtles.launch
+
+Управлять первой черепахой в 2.8:
+ros2 run turtlesim turtle_teleop_key --ros-args --remap turtle1/cmd_vel:=/turtlesim1/turtle1/cmd_vel
 
 
