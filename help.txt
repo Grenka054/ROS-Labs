@@ -1,3 +1,6 @@
+Список добавляемых файлов в коммит:
+git diff --cached --name-only
+
 Для старта рафического окна
 source /opt/ros/humble/setup.bash
 ros2 run turtlesim turtlesim_node
@@ -95,4 +98,15 @@ ros2 run turtlesim turtlesim_node
 ros2 run text_to_cmd_vel text_to_cmd_vel
 ros2 topic pub --once cmd_text std_msgs/msg/String "{data: "move_forward"}"
 ros2 topic pub --once cmd_text std_msgs/msg/String "{data: "turn_right"}"
+
+
+3 Module
+#1
+https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Service-And-Client.html#write-the-client-node
+
+colcon build --packages-select service_full_name
+ros2 run service_full_name service
+ros2 run service_full_name client Zubenko Mikhail Petrovich
+
+
 
