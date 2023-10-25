@@ -74,7 +74,7 @@ ros2 launch <package_name> <launch_file_name>
 ros2 launch three_turtles.launch
 
 Управлять первой черепахой в 2.8:
-ros2 run turtlesim turtle_teleop_key --ros-args --remap turtle1/cmd_vel:=/turtlesim1/turtle1/cmd_vel
+ros2 run turtlesim turtle_teleop_key --ros_args -r __ns:=/turtlesim1
 
 Создание ROS msg и srv:
 https://github.com/colcon/colcon-ed
@@ -108,5 +108,39 @@ colcon build --packages-select service_full_name
 ros2 run service_full_name service
 ros2 run service_full_name client Zubenko Mikhail Petrovich
 
+#2
+Actions:
+https://docs.ros.org/en/humble/Concepts/Basic/About-Actions.html
+https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html
+https://docs.ros.org/en/humble/Tutorials/Intermediate/Creating-an-Action.html
+https://docs.ros.org/en/humble/Tutorials/Intermediate/Writing-an-Action-Server-Client/Py.html
 
+ros2 pkg create --build-type ament_python action_turtle_commands
+ros2 pkg create turtle_action
+colcon build --packages-select action_turtle_commands turtle_action
 
+ros2 run turtlesim turtlesim_node
+ros2 run action_turtle_commands client
+ros2 run action_turtle_commands server
+
+#3
+Recording and playing back data:
+https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Recording-And-Playing-Back-Data/Recording-And-Playing-Back-Data.html
+
+ros2 run turtlesim turtlesim_node
+ros2 run turtlesim turtle_teleop_key
+
+для записи
+cd bag_files/
+ros2 bag record -o turtle_cmd_vel.mcap turtle1/cmd_vel
+
+для проигрывания
+ros2 topic echo /turtle1/pose > pose_speed_x1.yaml
+cd bag_files/
+ros2 bag play turtle_cmd_vel.mcap 
+ros2 topic echo /turtle1/pose > pose_speed_x2.yaml
+ros2 bag play turtle_cmd_vel.mcap -r 2
+
+#4
+ros2 doctor:
+https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Getting-Started-With-Ros2doctor.html
