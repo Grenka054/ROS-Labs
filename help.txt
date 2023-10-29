@@ -148,8 +148,11 @@ https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Getting-Start
 #5
 ros2 pkg create --build-type ament_python move_to_goal
 
+colcon build --packages-select move_to_goal
+
 ros2 run turtlesim turtlesim_node
 
-colcon build --packages-select move_to_goal
-cd src/
-ros2 run move_to_goal move_to_goal 7.0 7.0 -90.0
+ros2 run move_to_goal move_to_goal 1.0 1.0 90.0
+ros2 run move_to_goal move_to_goal 7.0 2.5 45.0
+ros2 run move_to_goal move_to_goal 7.0 7.0 0.0
+ros2 run move_to_goal move_to_goal 1.0 1.0 90.0

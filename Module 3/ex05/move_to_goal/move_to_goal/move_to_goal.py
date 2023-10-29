@@ -1,68 +1,71 @@
 import rclpy
 from rclpy.node import Node
-import sys
 
-from turtlesim.msg import Pose
 from geometry_msgs.msg import Twist
-from math import atan2, sqrt, pow, pi
-import time
+from turtlesim.msg import Pose
+from concurrent.futures import Future
 
-class Turtle_to_Goal(Node):
+import sys
+from math import pi, sqrt, atan2
+
+
+class MoveToGoal(Node):
 
     def __init__(self, x, y, theta):
-        super().__init__('my_publisher')
-        self.publisher = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
-        self.subscriber = self.create_subscription(Pose, '/turtle1/pose', self.update_pose, 10)
+        super().__init__("move_to_goal")
+
+        self.cmd_vel_pub = self.create_publisher(Twist, "/turtle1/cmd_vel", 10)
+        self.pose_sub = self.create_subscription(Pose, "/turtle1/pose", self.pose_callback, 10)
         self.current_pose = Pose()
-        self.goal_pose = Pose(x = float(x), y = float(y), theta = float(theta))
+        self.goal_pose = Pose(x = float(x), y = float(y), theta = float(theta) * pi / 180)
 
-    def update_pose(self, pose):
+        self.future = Future()
+        self.timer = self.create_timer(1, self.move_to_goal)
+
+    def pose_callback(self, pose):
+        # Обновить позицию
         self.current_pose = pose
-        self.move_to_goal(self.goal_pose)
 
-    def find_distance(self, goal_pose):
-        return sqrt(pow(goal_pose.x - self.current_pose.x, 2) + pow(goal_pose.y - self.current_pose.y, 2))
-
-    def find_angular(self, goal_pose):
-        return atan2(goal_pose.y - self.current_pose.y, goal_pose.x - self.current_pose.x)
-
-    def move_to_goal(self, goal_pose):
+    def send_turtle_msg(self, x_speed, angle_speed):
         tw = Twist()
-        # Вычисляем угол, на который нужно развернуться
-        alpha = self.find_angular(goal_pose)
-        angle = alpha - self.current_pose.theta
-        self.current_pose.theta += angle
-        tw.angular.z = angle
+        tw.linear.x = float(x_speed)
+        tw.angular.z = float(angle_speed)
 
-        # Поворот
-        self.publisher.publish(tw)
-        time.sleep(1)
-        tw.angular.z = 0.0
+        self.cmd_vel_pub.publish(tw)
 
-        # Прохать прямо на посчитанное расстояние
-        tw.linear.x = self.find_distance(goal_pose)
-        self.publisher.publish(tw)
-        time.sleep(1)
-        tw.linear.x = 0.0
-        tw.linear.y = 0.0
-		
-        # [0, 360] -> [-180, 180]
-        goal_pose.theta = (goal_pose.theta + 180) % 360 - 180
-        # Повернуться на заданный пользователем угол
-        goal_pose.theta *= pi / 180
-        tw.angular.z = goal_pose.theta - self.current_pose.theta
-        self.publisher.publish(tw)
-        time.sleep(1)
+    def move_to_goal(self):
+        x_d = self.goal_pose.x - self.current_pose.x
+        y_d = self.goal_pose.y - self.current_pose.y
+        alpha = atan2(y_d, x_d)
+
+        dst_target = sqrt(x_d**2 + y_d**2)
+        # Пройдем только часть расстояния, на деле она будет еще меньше
+        dst_target *= 0.4
+
+        angle_target = alpha - self.current_pose.theta
+
+        self.get_logger().info(f"Distance left: {dst_target:.4f}")
+
+        # Погрешность измерения расстояния
+        eps = 0.15
+        if abs(dst_target) > eps:
+            self.send_turtle_msg(dst_target, angle_target)
+            return
+
+        self.timer.destroy()
+
+        angle_target = self.goal_pose.theta - self.current_pose.theta
+        
+        self.send_turtle_msg(0.0, angle_target)
+        self.get_logger().info(f"Goal Reached")
+        self.future.set_result(None)
 
 def main():
     rclpy.init()
-
-    turtle_to_goal = Turtle_to_Goal(sys.argv[1], sys.argv[2], sys.argv[3])
-    rclpy.spin_once(turtle_to_goal)
-
-    turtle_to_goal.destroy_node()
+    mvg = MoveToGoal(sys.argv[1], sys.argv[2], sys.argv[3])
+    rclpy.spin_until_future_complete(mvg, mvg.future) 
+    mvg.destroy_node()
     rclpy.shutdown()
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
