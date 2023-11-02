@@ -38,15 +38,14 @@ class DynamicFrameBroadcaster(Node):
 
         radius = self.get_parameter('radius').get_parameter_value().double_value
         direction_of_rotation = self.get_parameter('direction_of_rotation').get_parameter_value().integer_value
-        direction_of_rotation *= -1
 
         t = TransformStamped()
         t.header.stamp = self.get_clock().now().to_msg()
         t.header.frame_id = 'turtle1'
         t.child_frame_id = 'carrot1'
 
-        t.transform.translation.x = radius * math.cos(ns / 1e9 * direction_of_rotation)
-        t.transform.translation.y = radius * math.sin(ns / 1e9 * direction_of_rotation)
+        t.transform.translation.x = radius * math.sin(ns / 1e9 * direction_of_rotation)
+        t.transform.translation.y = radius * math.cos(ns / 1e9 * direction_of_rotation)
 
         t.transform.translation.z = 0.0
         t.transform.rotation.x = 0.0
