@@ -120,8 +120,8 @@ ros2 pkg create turtle_action
 colcon build --packages-select action_turtle_commands turtle_action
 
 ros2 run turtlesim turtlesim_node
-ros2 run action_turtle_commands client
 ros2 run action_turtle_commands server
+ros2 run action_turtle_commands client
 
 #3
 Recording and playing back data:
