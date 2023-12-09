@@ -78,9 +78,6 @@ class FrameListener(Node):
                     self.get_logger().info(
                         f'Could not transform {to_frame_rel} to {from_frame_rel}: {ex}')
                     return
-                except (LookupException, ConnectivityException, ExtrapolationException):
-                    self.get_logger().info('transform not ready')
-                    return
 
                 msg = Twist()
                 scale_rotation_rate = 1.0

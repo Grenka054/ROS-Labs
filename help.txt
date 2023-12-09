@@ -14,7 +14,6 @@ export ROS_DOMAIN_ID=101
 
 Установка и настройка среды ROS:
 https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html
-https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html
 
 Создание пакета ROS:
 https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html
@@ -191,3 +190,37 @@ https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Learning-About-Tf2-And
 https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Time-Travel-With-Tf2-Py.html
 
 ros2 launch learning_tf2_py turtle_tf2_demo.launch.py
+
+5 Module
+#1
+http://wiki.ros.org/urdf/XML/link
+https://navigation.ros.org/setup_guides/transformation/setup_transforms.html
+https://navigation.ros.org/setup_guides/urdf/setup_urdf.html
+
+colcon build --symlink-install --packages-select chair_robot
+ros2 launch chair_robot robot_display.launch
+
+https://docs.ros.org/en/humble/Tutorials/Intermediate/URDF/Building-a-Visual-Robot-Model-with-URDF-from-Scratch.html
+https://docs.ros.org/en/humble/Tutorials/Intermediate/URDF/Building-a-Movable-Robot-Model-with-URDF.html
+type="continuous" - любой угол (типа колеса)
+type="revolute" - с ограничениями на угол
+type="prismatic" - перемещение в одном измерении
+type="planar" - перемещение в 2-х измерениях (плоскости)
+type="floating" - перемещение в 3-х измерениях (нет ограничений)
+https://docs.ros.org/en/humble/Tutorials/Intermediate/URDF/Adding-Physical-and-Collision-Properties-to-a-URDF-Model.html
+
+#2
+https://docs.ros.org/en/humble/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html
+colcon build --symlink-install --packages-select chair_robot_xacro
+ros2 launch chair_robot_xacro robot_display.launch
+
+#3
+https://github.com/virusapex/my_robot
+colcon build --symlink-install --packages-select robot_bringup robot_description robot_app
+
+ros2 launch robot_bringup diff_drive.launch.py
+
+Для запуска rqt-robot-steering:
+rqt --force-discover
+
+#4
