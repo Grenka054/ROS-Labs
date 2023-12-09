@@ -224,3 +224,5 @@ ros2 launch robot_bringup diff_drive.launch.py
 rqt --force-discover
 
 #4
+colcon build --symlink-install --packages-select chair_circle_move
+ros2 launch chair_circle_move circle_movement.launch.py
