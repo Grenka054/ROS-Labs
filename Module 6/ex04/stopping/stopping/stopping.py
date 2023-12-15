@@ -21,14 +21,11 @@ class Publisher(Node):
         scan_data = self.msg.ranges
         diapason = 18
         front = scan_data[359-diapason:359] + scan_data[:diapason]
-        for i in range(len(front)):
-            if(front[i] < self.msg.range_min and front[i] > self.msg.range_max):
-                continue
-
-            if(front[i] < 1.5):
-                self.get_logger().info('Obstacle founded in distance: ' + str(front[i]))
-                flag_free = 0
-                break
+        # Подсчитать количество точек, где значение < 1.5
+        close_points = [i for i in front if i < 1.5]
+        if len(close_points) >= 10:
+            self.get_logger().info('Obstacle founded in distance: ' + str(min(close_points)))
+            flag_free = 0
 
         message.linear.x = 0.1 if flag_free else 0.0
         self.publisher.publish(message)            
